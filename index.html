@@ -45,10 +45,11 @@
             <section class="tm-section">
                 <h2 class="title">고양이상 vs 강아지상 얼굴 분석기</h2>
                 <p class="tm-description">
-                    버튼을 눌러 웹캠을 켜고 당신의 얼굴이 고양이상인지 강아지상인지 확인해보세요!
+                    아래 버튼을 눌러 이미지를 업로드하고 당신의 얼굴이 고양이상인지 강아지상인지 확인해보세요!
                 </p>
-                <button type="button" onclick="initTm()" class="tm-start-btn">분석 시작</button>
-                <div id="webcam-container" class="tm-webcam-container"></div>
+                <input type="file" id="image-uploader" accept="image/*" style="display: none;">
+                <button type="button" id="upload-btn" class="tm-start-btn">이미지 업로드</button>
+                <div id="image-preview-container" class="tm-webcam-container"></div>
                 <div id="label-container" class="tm-label-container"></div>
             </section>
         </main>

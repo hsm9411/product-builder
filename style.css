@@ -326,12 +326,12 @@ html[data-theme='dark'] .form-group textarea {
     transform: scale(0.98);
 }
 
-.tm-webcam-container canvas {
+.tm-webcam-container #image-preview {
     border-radius: 12px;
     box-shadow: 0 4px 12px var(--shadow-color);
-    display: block; /* Remove extra space below canvas */
     margin: 0 auto 20px auto;
-    max-width: 100%; /* Ensure it fits within container */
+    max-width: 100%;
+    max-height: 300px;
     height: auto;
 }
 
