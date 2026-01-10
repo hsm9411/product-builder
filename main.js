@@ -66,58 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
         displayNumbers(newNumbers);
     });
 
-    // --- Contact Form ---
-    const contactFab = document.getElementById('contact-fab');
-    const contactModal = document.getElementById('contact-modal');
-    const closeModalBtn = document.getElementById('close-modal');
-    const contactForm = document.getElementById('contact-form');
-
-    const toggleModal = (show) => {
-        if (show) {
-            contactModal.classList.remove('hidden');
-        } else {
-            contactModal.classList.add('hidden');
-        }
-    };
-
-    contactFab.addEventListener('click', () => toggleModal(true));
-    closeModalBtn.addEventListener('click', () => toggleModal(false));
-    contactModal.addEventListener('click', (e) => {
-        if (e.target === contactModal) {
-            toggleModal(false);
-        }
-    });
-
-    // --- EmailJS Integration ---
-    (function() {
-        emailjs.init({
-          publicKey: "JeuzT7Yq85UM42Y3o",
-        });
-    })();
-
-    contactForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const submitBtn = this.querySelector('.submit-btn');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending...';
-
-        const serviceID = 'service_uat02yj';
-        const templateID = 'template_jg7qinn';
-
-        emailjs.sendForm(serviceID, templateID, this)
-            .then(() => {
-                alert('Sent!');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Send Message';
-                this.reset();
-                toggleModal(false);
-            }, (err) => {
-                alert(JSON.stringify(err));
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Send Message';
-            });
-    });
-
     // --- Teachable Machine Image Model (Image Upload) ---
     const tmURL = "https://teachablemachine.withgoogle.com/models/x4LHW8Yan/";
     let tmModel;
@@ -128,6 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load the model
     async function loadTMModel() {
+        // Ensure elements exist before proceeding
+        if (!uploadButton || !imageUploader || !imagePreviewContainer || !tmLabelContainer) {
+            return;
+        }
+
         const modelURL = tmURL + "model.json";
         const metadataURL = tmURL + "metadata.json";
         try {
@@ -160,31 +113,33 @@ document.addEventListener('DOMContentLoaded', () => {
             tmLabelContainer.appendChild(div);
         }
     }
+    
+    if (uploadButton && imageUploader) {
+        // Handle image upload
+        uploadButton.addEventListener('click', () => {
+            imageUploader.click();
+        });
 
-    // Handle image upload
-    uploadButton.addEventListener('click', () => {
-        imageUploader.click();
-    });
+        imageUploader.addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreviewContainer.innerHTML = ''; // Clear previous image
+                    const img = document.createElement('img');
+                    img.id = 'image-preview';
+                    img.src = e.target.result;
+                    img.onload = () => predictImage(img); // Predict after image is loaded
+                    imagePreviewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
-    imageUploader.addEventListener('change', (event) => {
-        const files = event.target.files;
-        if (files && files.length > 0) {
-            const file = files[0];
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                imagePreviewContainer.innerHTML = ''; // Clear previous image
-                const img = document.createElement('img');
-                img.id = 'image-preview';
-                img.src = e.target.result;
-                img.onload = () => predictImage(img); // Predict after image is loaded
-                imagePreviewContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // Initial setup
-    uploadButton.disabled = true;
-    uploadButton.textContent = '모델 로딩중...';
-    loadTMModel();
+        // Initial setup
+        uploadButton.disabled = true;
+        uploadButton.textContent = '모델 로딩중...';
+        loadTMModel();
+    }
 });

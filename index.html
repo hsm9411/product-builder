@@ -6,84 +6,77 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6741004776917114"
      crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lotto Number Generator</title>
+    <title>Product Builder - Fun & Useful Web Tools</title>
+    <meta name="description" content="A collection of fun and useful web tools, including a lotto number generator and an AI-powered cat/dog facial analysis tool.">
     <link rel="stylesheet" href="style.css">
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <button id="theme-toggle" class="theme-btn">🌙</button>
+    <div class="page-container">
+        <header class="main-header">
+            <nav class="main-nav">
+                <a href="index.html" class="nav-brand">Product Builder</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                </ul>
+                <button id="theme-toggle" class="theme-btn">🌙</button>
+            </nav>
         </header>
-        <main>
-            <h1 class="title">로또 번호 생성기</h1>
-            <div id="lotto-numbers" class="lotto-numbers-container">
-                <span class="placeholder">버튼을 눌러 번호를 생성하세요</span>
-            </div>
-            <button id="generate-btn" class="generate-btn">번호 생성</button>
 
-            <div id="disqus_thread" style="margin-top: 30px;"></div>
-            <script>
-                /**
-                *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-                *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-                /*
-                var disqus_config = function () {
-                this.page.url = window.location.href;  // Replace PAGE_URL with your page's canonical URL variable
-                this.page.identifier = window.location.href; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                };
-                */
-                (function() { // DON'T EDIT BELOW THIS LINE
-                var d = document, s = d.createElement('script');
-                s.src = 'https://productbuilder-5.disqus.com/embed.js';
-                s.setAttribute('data-timestamp', +new Date());
-                (d.head || d.body).appendChild(s);
-                })();
-            </script>
-            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <main class="content-wrapper">
+            <section class="tool-section">
+                <h2 class="title">로또 번호 생성기</h2>
+                <p class="section-description">버튼을 클릭하여 6개의 행운 번호를 생성해보세요.</p>
+                <div id="lotto-numbers" class="lotto-numbers-container">
+                    <span class="placeholder">버튼을 눌러 번호를 생성하세요</span>
+                </div>
+                <button id="generate-btn" class="generate-btn">번호 생성</button>
+            </section>
 
-            <section class="tm-section">
+            <section class="tool-section">
                 <h2 class="title">고양이상 vs 강아지상 얼굴 분석기</h2>
-                <p class="tm-description">
-                    아래 버튼을 눌러 이미지를 업로드하고 당신의 얼굴이 고양이상인지 강아지상인지 확인해보세요!
+                <p class="section-description">
+                    AI가 당신의 얼굴을 분석해 고양이상과 강아지상 중 어느 쪽에 더 가까운지 알려드립니다.
                 </p>
                 <input type="file" id="image-uploader" accept="image/*" style="display: none;">
                 <button type="button" id="upload-btn" class="tm-start-btn">이미지 업로드</button>
                 <div id="image-preview-container" class="tm-webcam-container"></div>
                 <div id="label-container" class="tm-label-container"></div>
             </section>
+            
+            <section class="tool-section">
+                <h2 class="title">댓글</h2>
+                <div id="disqus_thread"></div>
+                <script>
+                    var disqus_config = function () {
+                        this.page.url = window.location.href;
+                        this.page.identifier = window.location.href;
+                    };
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://productbuilder-5.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </section>
         </main>
+
+        <footer class="main-footer">
+            <div class="footer-links">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+            <p>&copy; 2024 Product Builder. All Rights Reserved.</p>
+        </footer>
     </div>
     <script src="main.js" defer></script>
-
-    <!-- Contact Me Button and Form -->
-    <button id="contact-fab" class="fab">✉️</button>
-
-    <div id="contact-modal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <header class="modal-header">
-                <h2>Contact Me</h2>
-                <button id="close-modal" class="close-btn">&times;</button>
-            </header>
-            <form id="contact-form">
-                <div class="form-group">
-                    <label for="user_name">Name</label>
-                    <input type="text" id="user_name" name="user_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="user_email">Email</label>
-                    <input type="email" id="user_email" name="user_email" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="submit-btn">Send Message</button>
-            </form>
-        </div>
-    </div>
 </body>
 </html>
