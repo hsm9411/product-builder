@@ -284,3 +284,73 @@ html[data-theme='dark'] .form-group textarea {
     background-color: #a0a0a0;
     cursor: not-allowed;
 }
+
+/* --- Teachable Machine Styles --- */
+.tm-section {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid var(--bg-color);
+    text-align: center;
+}
+
+.tm-section .title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.tm-description {
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
+.tm-start-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    background-color: #f06292; /* A friendly pink/red */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-bottom: 20px;
+}
+
+.tm-start-btn:hover {
+    background-color: #e94e77;
+    transform: scale(1.02);
+}
+
+.tm-start-btn:active {
+    transform: scale(0.98);
+}
+
+.tm-webcam-container canvas {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    display: block; /* Remove extra space below canvas */
+    margin: 0 auto 20px auto;
+    max-width: 100%; /* Ensure it fits within container */
+    height: auto;
+}
+
+.tm-label-container {
+    background-color: var(--bg-color);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.tm-label-container div {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-color);
+    width: 100%;
+}

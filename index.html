@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -39,6 +41,16 @@
                 })();
             </script>
             <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+            <section class="tm-section">
+                <h2 class="title">고양이상 vs 강아지상 얼굴 분석기</h2>
+                <p class="tm-description">
+                    버튼을 눌러 웹캠을 켜고 당신의 얼굴이 고양이상인지 강아지상인지 확인해보세요!
+                </p>
+                <button type="button" onclick="initTm()" class="tm-start-btn">분석 시작</button>
+                <div id="webcam-container" class="tm-webcam-container"></div>
+                <div id="label-container" class="tm-label-container"></div>
+            </section>
         </main>
     </div>
     <script src="main.js" defer></script>
