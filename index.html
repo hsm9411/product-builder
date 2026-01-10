@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lotto Number Generator</title>
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -20,5 +22,32 @@
         </main>
     </div>
     <script src="main.js" defer></script>
+
+    <!-- Contact Me Button and Form -->
+    <button id="contact-fab" class="fab">✉️</button>
+
+    <div id="contact-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2>Contact Me</h2>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </header>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="user_name">Name</label>
+                    <input type="text" id="user_name" name="user_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="user_email">Email</label>
+                    <input type="email" id="user_email" name="user_email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

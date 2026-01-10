@@ -65,4 +65,56 @@ document.addEventListener('DOMContentLoaded', () => {
         const newNumbers = generateNumbers();
         displayNumbers(newNumbers);
     });
+
+    // --- Contact Form ---
+    const contactFab = document.getElementById('contact-fab');
+    const contactModal = document.getElementById('contact-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const contactForm = document.getElementById('contact-form');
+
+    const toggleModal = (show) => {
+        if (show) {
+            contactModal.classList.remove('hidden');
+        } else {
+            contactModal.classList.add('hidden');
+        }
+    };
+
+    contactFab.addEventListener('click', () => toggleModal(true));
+    closeModalBtn.addEventListener('click', () => toggleModal(false));
+    contactModal.addEventListener('click', (e) => {
+        if (e.target === contactModal) {
+            toggleModal(false);
+        }
+    });
+
+    // --- EmailJS Integration ---
+    (function() {
+        emailjs.init({
+          publicKey: "JeuzT7Yq85UM42Y3o",
+        });
+    })();
+
+    contactForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const submitBtn = this.querySelector('.submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+
+        const serviceID = 'service_uat02yj';
+        const templateID = 'template_jg7qinn';
+
+        emailjs.sendForm(serviceID, templateID, this)
+            .then(() => {
+                alert('Sent!');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+                this.reset();
+                toggleModal(false);
+            }, (err) => {
+                alert(JSON.stringify(err));
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            });
+    });
 });
