@@ -43,19 +43,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const timeOffsets = {}; // Store { timezone: offset_in_ms }
 
+        // Helper function for fetch with retry
+        const retryFetch = async (url, retries = 3, delay = 1000) => {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response;
+                } catch (error) {
+                    if (i < retries - 1) {
+                        console.warn(`Fetch failed for ${url}, retrying in ${delay}ms...`, error);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2; // Exponential backoff
+                    } else {
+                        throw error; // Re-throw error after max retries
+                    }
+                }
+            }
+        };
+
         const fetchWorldTimes = async () => {
             const localDate = new Date();
             const fetchPromises = Object.values(timezones).map(async tzInfo => {
                 try {
-                    const res = await fetch(`https://worldtimeapi.org/api/timezone/${tzInfo.tz}`);
-                    if (!res.ok) {
-                        throw new Error(`HTTP error! status: ${res.status}`);
-                    }
+                    const res = await retryFetch(`https://worldtimeapi.org/api/timezone/${tzInfo.tz}`, 3, 1000);
                     const data = await res.json();
                     const serverTime = new Date(data.datetime).getTime();
                     timeOffsets[data.timezone] = serverTime - localDate.getTime();
                 } catch (error) {
-                    console.error(`Error fetching time for ${tzInfo.name} (${tzInfo.tz}):`, error);
+                    console.error(`Error fetching time for ${tzInfo.name} (${tzInfo.tz}) after multiple retries:`, error);
                     timeOffsets[tzInfo.tz] = undefined; // Mark as failed
                     const el = document.getElementById(Object.keys(timezones).find(key => timezones[key].tz === tzInfo.tz));
                     if (el) {
