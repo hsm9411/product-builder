@@ -167,6 +167,35 @@ body {
     letter-spacing: 2px;
 }
 
+.clock-card .city-image {
+    width: 80px; /* Adjust as needed */
+    height: 80px; /* Adjust as needed */
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 3px solid var(--primary-color);
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.loading-text {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    opacity: 0.7;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.time-error {
+    font-size: 1rem;
+    color: #dc3545; /* Red color for errors */
+    font-weight: 600;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
 
 .lotto-numbers-container, .tm-label-container {
     min-height: 60px;

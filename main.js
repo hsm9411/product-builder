@@ -36,12 +36,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const clockContainer = document.getElementById('world-clock-container');
     if (clockContainer) {
         const timezones = {
-            'clock-seoul': { name: '서울', tz: 'Asia/Seoul' },
-            'clock-ny': { name: '뉴욕', tz: 'America/New_York' },
-            'clock-london': { name: '런던', tz: 'Europe/London' },
+            'clock-seoul': { name: '서울', tz: 'Asia/Seoul', image: 'images/seoul.jpg' },
+            'clock-ny': { name: '뉴욕', tz: 'America/New_York', image: 'images/newyork.jpg' },
+            'clock-london': { name: '런던', tz: 'Europe/London', image: 'images/london.jpg' },
         };
 
         const timeOffsets = {}; // Store { timezone: offset_in_ms }
+
+        // Initialize clocks with loading state
+        Object.entries(timezones).forEach(([id, { name, image }]) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.innerHTML = `
+                    <img src="${image}" alt="${name}" class="city-image">
+                    <div class="city-name">${name}</div>
+                    <div class="time loading-text">로딩 중...</div>
+                `;
+            }
+        });
 
         // Helper function for fetch with retry
         const retryFetch = async (url, retries = 3, delay = 1000) => {
@@ -77,7 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     timeOffsets[tzInfo.tz] = undefined; // Mark as failed
                     const el = document.getElementById(Object.keys(timezones).find(key => timezones[key].tz === tzInfo.tz));
                     if (el) {
-                        el.innerHTML = `<div class="city-name">${tzInfo.name}</div><div class="time-error">불러오기 실패</div>`;
+                        el.innerHTML = `
+                            <img src="${tzInfo.image}" alt="${tzInfo.name}" class="city-image">
+                            <div class="city-name">${tzInfo.name}</div>
+                            <div class="time-error">API 연결 실패</div>
+                        `;
                     }
                 }
             });
@@ -88,13 +104,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const updateClocks = () => {
             const localNow = new Date();
-            Object.entries(timezones).forEach(([id, { name, tz }]) => {
+            Object.entries(timezones).forEach(([id, { name, tz, image }]) => {
                 const offset = timeOffsets[tz];
+                const el = document.getElementById(id);
+
                 if (offset === undefined) {
-                    // If fetching failed, leave error message or show placeholder
-                    const el = document.getElementById(id);
                     if (el && !el.querySelector('.time-error')) { // Only update if not already showing error
-                        el.innerHTML = `<div class="city-name">${name}</div><div class="time-error">불러오기 실패</div>`;
+                        el.innerHTML = `
+                            <img src="${image}" alt="${name}" class="city-image">
+                            <div class="city-name">${name}</div>
+                            <div class="time-error">API 연결 실패</div>
+                        `;
                     }
                     return; 
                 }
@@ -105,9 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const minutes = String(cityTime.getMinutes()).padStart(2, '0');
                 const seconds = String(cityTime.getSeconds()).padStart(2, '0');
 
-                const el = document.getElementById(id);
                 if (el) {
                      el.innerHTML = `
+                        <img src="${image}" alt="${name}" class="city-image">
                         <div class="city-name">${name}</div>
                         <div class="time">${hours}:${minutes}:${seconds}</div>
                     `;
