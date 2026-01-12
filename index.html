@@ -44,8 +44,16 @@
                     AI가 당신의 얼굴을 분석해 고양이상과 강아지상 중 어느 쪽에 더 가까운지 알려드립니다.
                 </p>
                 <input type="file" id="image-uploader" accept="image/*" style="display: none;">
-                <button type="button" id="upload-btn" class="tm-start-btn">이미지 업로드</button>
-                <div id="image-preview-container" class="tm-webcam-container"></div>
+
+                <div id="image-drop-zone" class="drop-zone">
+                    <div id="image-preview-container"></div>
+                    <div class="drop-zone-prompt">
+                        <p>여기에 이미지를 드래그 앤 드롭하세요</p>
+                        <p>또는</p>
+                        <button type="button" id="upload-btn" class="tm-start-btn">파일 선택</button>
+                    </div>
+                </div>
+
                 <div id="label-container" class="tm-label-container"></div>
             </section>
             
