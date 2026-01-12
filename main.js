@@ -89,15 +89,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     timeOffsets[tzInfo.tz] = undefined; // Mark as failed
                     const el = document.getElementById(Object.keys(timezones).find(key => timezones[key].tz === tzInfo.tz));
                     if (el) {
-                        el.innerHTML = `
-                            <img src="${tzInfo.image}" alt="${tzInfo.name}" class="city-image">
-                            <div class="city-name">${tzInfo.name}</div>
-                            <div class="time-error">API 연결 실패</div>
-                        `;
+                        const timeEl = el.querySelector('.time');
+                        if (timeEl) {
+                            timeEl.textContent = 'API 연결 실패';
+                            timeEl.classList.add('time-error'); // Add class for styling
+                        }
                     }
                 }
             });
             await Promise.allSettled(fetchPromises); // Use allSettled to wait for all promises regardless of success/failure
+            console.log('Calculated timeOffsets:', timeOffsets); // Debugging line
             updateClocks(); // Initial display for successful ones
             setInterval(updateClocks, 1000); // Start updating
         };
@@ -109,12 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const el = document.getElementById(id);
 
                 if (offset === undefined) {
-                    if (el && !el.querySelector('.time-error')) { // Only update if not already showing error
-                        el.innerHTML = `
-                            <img src="${image}" alt="${name}" class="city-image">
-                            <div class="city-name">${name}</div>
-                            <div class="time-error">API 연결 실패</div>
-                        `;
+                    const timeEl = el.querySelector('.time');
+                    if (timeEl) {
+                        timeEl.textContent = 'API 연결 실패';
+                        timeEl.classList.add('time-error');
                     }
                     return; 
                 }
@@ -125,12 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const minutes = String(cityTime.getMinutes()).padStart(2, '0');
                 const seconds = String(cityTime.getSeconds()).padStart(2, '0');
 
-                if (el) {
-                     el.innerHTML = `
-                        <img src="${image}" alt="${name}" class="city-image">
-                        <div class="city-name">${name}</div>
-                        <div class="time">${hours}:${minutes}:${seconds}</div>
-                    `;
+                const timeEl = el.querySelector('.time');
+                if (timeEl) {
+                     timeEl.textContent = `${hours}:${minutes}:${seconds}`;
+                     timeEl.classList.remove('time-error'); // Remove error class if time is successfully shown
                 }
             });
         };
