@@ -41,48 +41,46 @@ document.addEventListener('DOMContentLoaded', () => {
             'clock-london': { name: '런던', tz: 'Europe/London' },
         };
 
-        const renderClock = (elementId, city, timeString) => {
-            const el = document.getElementById(elementId);
-            if (el) {
-                const date = new Date(timeString);
-                const hours = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                const seconds = String(date.getSeconds()).padStart(2, '0');
-                el.innerHTML = `
-                    <div class="city-name">${city}</div>
-                    <div class="time">${hours}:${minutes}:${seconds}</div>
-                `;
-            }
-        };
+        const timeOffsets = {};
 
         const fetchWorldTimes = async () => {
             try {
-                const requests = Object.entries(timezones).map(([id, { tz }]) => 
-                    fetch(`https://worldtimeapi.org/api/timezone/${tz}`).then(res => res.json())
+                const requests = Object.values(timezones).map(tzInfo =>
+                    fetch(`https://worldtimeapi.org/api/timezone/${tzInfo.tz}`).then(res => {
+                        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                        return res.json();
+                    })
                 );
                 
                 const results = await Promise.all(requests);
                 
-                results.forEach((data, index) => {
-                    const id = Object.keys(timezones)[index];
-                    const { name } = Object.values(timezones)[index];
-                    renderClock(id, name, data.utc_datetime);
+                const localDate = new Date();
+                
+                results.forEach(data => {
+                    const serverTime = new Date(data.datetime).getTime();
+                    timeOffsets[data.timezone] = serverTime - localDate.getTime();
                 });
+
+                updateClocks(); // Initial display
+                setInterval(updateClocks, 1000); // Update every second
 
             } catch (error) {
                 console.error("Error fetching world times:", error);
-                clockContainer.innerHTML = "<p>시간 정보를 불러오는 데 실패했습니다.</p>";
+                if(clockContainer) clockContainer.innerHTML = "<p>시간 정보를 불러오는 데 실패했습니다.</p>";
             }
         };
 
         const updateClocks = () => {
+            const localNow = new Date();
             Object.entries(timezones).forEach(([id, { name, tz }]) => {
-                const timeString = new Date().toLocaleTimeString('en-US', { timeZone: tz });
-                const dateObj = new Date(`1970-01-01T${timeString}Z`);
+                const offset = timeOffsets[tz];
+                if (offset === undefined) return; // Don't render if offset isn't calculated yet
+
+                const cityTime = new Date(localNow.getTime() + offset);
                 
-                const hours = String(dateObj.getUTCHours()).padStart(2, '0');
-                const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
-                const seconds = String(dateObj.getUTCSeconds()).padStart(2, '0');
+                const hours = String(cityTime.getHours()).padStart(2, '0');
+                const minutes = String(cityTime.getMinutes()).padStart(2, '0');
+                const seconds = String(cityTime.getSeconds()).padStart(2, '0');
 
                 const el = document.getElementById(id);
                 if (el) {
@@ -94,9 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
         
-        fetchWorldTimes().then(() => {
-            setInterval(updateClocks, 1000);
-        });
+        fetchWorldTimes();
     }
 
     // --- Lotto Number Generator ---
