@@ -41,40 +41,45 @@ document.addEventListener('DOMContentLoaded', () => {
             'clock-london': { name: '런던', tz: 'Europe/London' },
         };
 
-        const timeOffsets = {};
+        const timeOffsets = {}; // Store { timezone: offset_in_ms }
 
         const fetchWorldTimes = async () => {
-            try {
-                const requests = Object.values(timezones).map(tzInfo =>
-                    fetch(`https://worldtimeapi.org/api/timezone/${tzInfo.tz}`).then(res => {
-                        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-                        return res.json();
-                    })
-                );
-                
-                const results = await Promise.all(requests);
-                
-                const localDate = new Date();
-                
-                results.forEach(data => {
+            const localDate = new Date();
+            const fetchPromises = Object.values(timezones).map(async tzInfo => {
+                try {
+                    const res = await fetch(`https://worldtimeapi.org/api/timezone/${tzInfo.tz}`);
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    const data = await res.json();
                     const serverTime = new Date(data.datetime).getTime();
                     timeOffsets[data.timezone] = serverTime - localDate.getTime();
-                });
-
-                updateClocks(); // Initial display
-                setInterval(updateClocks, 1000); // Update every second
-
-            } catch (error) {
-                console.error("Error fetching world times:", error);
-                if(clockContainer) clockContainer.innerHTML = "<p>시간 정보를 불러오는 데 실패했습니다.</p>";
-            }
+                } catch (error) {
+                    console.error(`Error fetching time for ${tzInfo.name} (${tzInfo.tz}):`, error);
+                    timeOffsets[tzInfo.tz] = undefined; // Mark as failed
+                    const el = document.getElementById(Object.keys(timezones).find(key => timezones[key].tz === tzInfo.tz));
+                    if (el) {
+                        el.innerHTML = `<div class="city-name">${tzInfo.name}</div><div class="time-error">불러오기 실패</div>`;
+                    }
+                }
+            });
+            await Promise.allSettled(fetchPromises); // Use allSettled to wait for all promises regardless of success/failure
+            updateClocks(); // Initial display for successful ones
+            setInterval(updateClocks, 1000); // Start updating
         };
 
         const updateClocks = () => {
             const localNow = new Date();
             Object.entries(timezones).forEach(([id, { name, tz }]) => {
                 const offset = timeOffsets[tz];
-                if (offset === undefined) return; // Don't render if offset isn't calculated yet
+                if (offset === undefined) {
+                    // If fetching failed, leave error message or show placeholder
+                    const el = document.getElementById(id);
+                    if (el && !el.querySelector('.time-error')) { // Only update if not already showing error
+                        el.innerHTML = `<div class="city-name">${name}</div><div class="time-error">불러오기 실패</div>`;
+                    }
+                    return; 
+                }
 
                 const cityTime = new Date(localNow.getTime() + offset);
                 
