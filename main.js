@@ -32,6 +32,73 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(theme);
     });
 
+    // --- World Clock ---
+    const clockContainer = document.getElementById('world-clock-container');
+    if (clockContainer) {
+        const timezones = {
+            'clock-seoul': { name: '서울', tz: 'Asia/Seoul' },
+            'clock-ny': { name: '뉴욕', tz: 'America/New_York' },
+            'clock-london': { name: '런던', tz: 'Europe/London' },
+        };
+
+        const renderClock = (elementId, city, timeString) => {
+            const el = document.getElementById(elementId);
+            if (el) {
+                const date = new Date(timeString);
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+                el.innerHTML = `
+                    <div class="city-name">${city}</div>
+                    <div class="time">${hours}:${minutes}:${seconds}</div>
+                `;
+            }
+        };
+
+        const fetchWorldTimes = async () => {
+            try {
+                const requests = Object.entries(timezones).map(([id, { tz }]) => 
+                    fetch(`https://worldtimeapi.org/api/timezone/${tz}`).then(res => res.json())
+                );
+                
+                const results = await Promise.all(requests);
+                
+                results.forEach((data, index) => {
+                    const id = Object.keys(timezones)[index];
+                    const { name } = Object.values(timezones)[index];
+                    renderClock(id, name, data.utc_datetime);
+                });
+
+            } catch (error) {
+                console.error("Error fetching world times:", error);
+                clockContainer.innerHTML = "<p>시간 정보를 불러오는 데 실패했습니다.</p>";
+            }
+        };
+
+        const updateClocks = () => {
+            Object.entries(timezones).forEach(([id, { name, tz }]) => {
+                const timeString = new Date().toLocaleTimeString('en-US', { timeZone: tz });
+                const dateObj = new Date(`1970-01-01T${timeString}Z`);
+                
+                const hours = String(dateObj.getUTCHours()).padStart(2, '0');
+                const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
+                const seconds = String(dateObj.getUTCSeconds()).padStart(2, '0');
+
+                const el = document.getElementById(id);
+                if (el) {
+                     el.innerHTML = `
+                        <div class="city-name">${name}</div>
+                        <div class="time">${hours}:${minutes}:${seconds}</div>
+                    `;
+                }
+            });
+        };
+        
+        fetchWorldTimes().then(() => {
+            setInterval(updateClocks, 1000);
+        });
+    }
+
     // --- Lotto Number Generator ---
     if (generateBtn) {
         const getBallColorClass = (number) => {
