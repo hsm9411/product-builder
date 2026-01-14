@@ -38,6 +38,7 @@
                 <p>Product Builder는 여러분의 일상에 작은 즐거움과 호기심을 더해줄 다채로운 웹 도구를 제공합니다. 최신 기술을 활용한 재미있는 AI 분석부터, 매주 기대감을 더하는 로또 번호 생성까지, Product Builder와 함께 특별한 경험을 만들어보세요.</p>
             </section>
 
+            <!-- 로또 번호 생성기 섹션 -->
             <section class="tool-section">
                 <h2 class="title">로또 번호 생성기</h2>
                 <div id="lotto-numbers" class="lotto-numbers-container">
@@ -45,7 +46,11 @@
                 </div>
                 <button id="generate-btn" class="generate-btn">번호 생성</button>
 
-                <div class="content-block">
+                <!-- 로또 설명 토글 버튼 -->
+                <button class="content-toggle-btn" data-target="lotto-info" data-text="로또에 대한 재미있는 사실">로또에 대한 재미있는 사실 &#x25BC;</button>
+                
+                <!-- 로또 설명 콘텐츠 (collapsible) -->
+                <div id="lotto-info" class="content-block collapsible-content">
                     <h3>로또, 과학과 행운의 만남</h3>
                     <p>매주 우리는 작은 종이 한 장에 큰 기대를 걸어봅니다. 로또는 단순한 숫자 게임을 넘어, 많은 이들에게 일주일의 희망과 즐거움을 선사하는 문화가 되었습니다. 저희 로또 번호 생성기는 무작위 알고리즘을 통해 여러분에게 6개의 새로운 번호를 제안합니다. 모든 번호의 조합은 동일한 확률로 생성되므로, 어떤 번호가 나올지는 순전히 행운에 달려있습니다.</p>
                     <h4>로또 번호, 어떻게 선택해야 할까?</h4>
@@ -54,6 +59,7 @@
                 </div>
             </section>
 
+            <!-- AI 고양이 섹션 -->
             <section class="tool-section">
                 <h2 class="title">오늘의 AI 고양이</h2>
                 <div id="ai-cat-container" class="ai-cat-container">
@@ -61,6 +67,29 @@
                 </div>
             </section>
 
+            <!-- 도서 추천 섹션 -->
+            <section class="tool-section">
+                <h2 class="title">주제별 추천 도서</h2>
+                <div class="subject-buttons">
+                    <button class="subject-btn" data-subject="artificial_intelligence">인공지능</button>
+                    <button class="subject-btn" data-subject="science_fiction">과학 소설</button>
+                    <button class="subject-btn" data-subject="history">역사</button>
+                </div>
+                <div id="book-list-container" class="book-list-container">
+                    <div class="placeholder">주제를 선택하여 관련 도서를 확인하세요.</div>
+                </div>
+            </section>
+
+            <!-- 랜덤 레시피 섹션 -->
+            <section class="tool-section">
+                <h2 class="title">오늘의 랜덤 레시피</h2>
+                <div id="random-recipe-container" class="random-recipe-container">
+                    <div class="placeholder">레시피를 불러오는 중...</div>
+                </div>
+                <button id="new-recipe-btn" class="generate-btn">다른 레시피 보기</button>
+            </section>
+
+            <!-- 얼굴 분석기 섹션 -->
             <section class="tool-section">
                 <h2 class="title">고양이상 vs 강아지상 얼굴 분석기</h2>
                 <input type="file" id="image-uploader" accept="image/*" style="display: none;">
@@ -76,13 +105,17 @@
 
                 <div id="label-container" class="tm-label-container"></div>
 
-                <div class="content-block">
+                <!-- 얼굴 분석 설명 토글 버튼 -->
+                <button class="content-toggle-btn" data-target="face-info" data-text="분석 원리 더보기">분석 원리 더보기 &#x25BC;</button>
+
+                <!-- 얼굴 분석 설명 콘텐츠 (collapsible) -->
+                <div id="face-info" class="content-block collapsible-content">
                     <h3>나는 강아지상일까, 고양이상일까?</h3>
                     <p>친구들 사이에서 한 번쯤은 이야기해봤을 주제, "너는 강아지상이야, 아니면 고양이상이야?" 이제 AI 기술로 재미있게 분석해보세요. 저희 얼굴 분석기는 수천 장의 이미지를 학습한 AI 모델을 사용하여 여러분의 얼굴 특징을 분석하고, 강아지와 고양이 중 어느 쪽에 더 가까운지 판단해드립니다.</p>
                     <h4>어떻게 작동하나요?</h4>
                     <p>여러분이 이미지를 업로드하면, 저희 AI 모델은 이미지 속 얼굴의 주요 특징(눈, 코, 입 모양, 얼굴 윤곽 등)을 분석합니다. 이 데이터는 사전에 학습된 '강아지상'과 '고양이상'의 특징 데이터와 비교됩니다. 최종적으로, 모델은 두 카테고리 중 어느 쪽과 더 유사한지를 확률로 계산하여 결과를 보여줍니다. 모든 분석은 사용자의 기기에서 직접 처리되며, 여러분의 사진은 어디에도 전송되거나 저장되지 않으니 안심하고 이용하세요.</p>
                     <h4>재미로 즐겨주세요!</h4>
-                    <p>분석 결과는 과학적인 근거보다는 학습된 데이터에 기반한 통계적인 예측입니다. 친구나 가족과 함께 결과를 공유하며 즐거운 시간을 보내는 용도로 활용해주세요. 오늘의 شما는 강아지상, 내일의 شما는 고양이상이 될 수도 있답니다!</p>
+                    <p>분석 결과는 과학적인 근거보다는 학습된 데이터에 기반한 통계적인 예측입니다. 친구나 가족과 함께 결과를 공유하며 즐거운 시간을 보내는 용도로 활용해주세요. 오늘의 당신은 강아지상, 내일의 당신은 고양이상이 될 수도 있답니다!</p>
                 </div>
             </section>
             
