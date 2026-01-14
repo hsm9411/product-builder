@@ -32,6 +32,41 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(theme);
     });
 
+    // --- AI Cat of the Day ---
+    const aiCatContainer = document.getElementById('ai-cat-container');
+    if (aiCatContainer) {
+        const fetchAiCat = async () => {
+            try {
+                const response = await fetch('https://api.ai-cats.net/v1/cat/info/669de24a-1da1-4fcd-84b1-9e55a43a0e0e');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                const formattedDate = new Date(data.dateCreated).toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                aiCatContainer.innerHTML = `
+                    <img src="${data.url}" alt="AI 고양이 이미지" class="ai-cat-image">
+                    <div class="ai-cat-prompt">
+                        <p>${data.prompt}</p>
+                    </div>
+                    <div class="ai-cat-date">
+                        <span>생성일: ${formattedDate}</span>
+                    </div>
+                `;
+            } catch (error) {
+                console.error("Error fetching AI cat:", error);
+                aiCatContainer.innerHTML = `<div class="placeholder">고양이 정보를 불러오는 데 실패했습니다.</div>`;
+            }
+        };
+
+        fetchAiCat();
+    }
+
     // --- Lotto Number Generator ---
     if (generateBtn) {
         const getBallColorClass = (number) => {

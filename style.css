@@ -378,3 +378,30 @@ body {
 #disqus_thread {
     margin-top: 20px;
 }
+
+/* AI Cat Section */
+.ai-cat-container {
+    text-align: center;
+}
+
+.ai-cat-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.ai-cat-prompt {
+    font-size: 16px;
+    color: var(--text-color);
+    opacity: 0.9;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.ai-cat-date {
+    font-size: 14px;
+    color: var(--text-color);
+    opacity: 0.6;
+}
