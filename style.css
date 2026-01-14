@@ -177,6 +177,11 @@ body {
     box-shadow: 0 2px 8px var(--shadow-color);
 }
 
+.city-emoji {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
 .loading-text {
     font-size: 1.5rem;
     color: var(--primary-color);

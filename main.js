@@ -35,20 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- World Clock ---
     const clockContainer = document.getElementById('world-clock-container');
     if (clockContainer) {
-        const timezones = {
-            'clock-seoul': { name: '서울', tz: 'Asia/Seoul', image: 'images/seoul.jpg' },
-            'clock-ny': { name: '뉴욕', tz: 'America/New_York', image: 'images/newyork.jpg' },
-            'clock-london': { name: '런던', tz: 'Europe/London', image: 'images/london.jpg' },
+        const cityConfig = {
+            'clock-seoul': { name: '서울', tz: 'Asia/Seoul', emoji: '🇰🇷', offsetHours: 0 },
+            'clock-ny': { name: '뉴욕', tz: 'America/New_York', emoji: '🇺🇸', offsetHours: -14 },
+            'clock-london': { name: '런던', tz: 'Europe/London', emoji: '🇬🇧', offsetHours: -8 },
         };
 
-        const timeOffsets = {}; // Store { timezone: offset_in_ms }
+        let seoulTimeOffset = null;
 
         // Initialize clocks with loading state
-        Object.entries(timezones).forEach(([id, { name, image }]) => {
+        Object.entries(cityConfig).forEach(([id, { name, emoji }]) => {
             const el = document.getElementById(id);
             if (el) {
                 el.innerHTML = `
-                    <img src="${image}" alt="${name}" class="city-image">
+                    <div class="city-emoji">${emoji}</div>
                     <div class="city-name">${name}</div>
                     <div class="time loading-text">로딩 중...</div>
                 `;
@@ -60,65 +60,57 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < retries; i++) {
                 try {
                     const response = await fetch(url);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     return response;
                 } catch (error) {
                     if (i < retries - 1) {
                         console.warn(`Fetch failed for ${url}, retrying in ${delay}ms...`, error);
                         await new Promise(resolve => setTimeout(resolve, delay));
-                        delay *= 2; // Exponential backoff
+                        delay *= 2;
                     } else {
-                        throw error; // Re-throw error after max retries
+                        throw error;
                     }
                 }
             }
         };
 
-        const fetchWorldTimes = async () => {
-            const localDate = new Date();
-            const fetchPromises = Object.values(timezones).map(async tzInfo => {
-                try {
-                    const res = await retryFetch(`https://worldtimeapi.org/api/timezone/${tzInfo.tz}`, 3, 1000);
-                    const data = await res.json();
-                    const serverTime = new Date(data.datetime).getTime();
-                    timeOffsets[data.timezone] = serverTime - localDate.getTime();
-                } catch (error) {
-                    console.error(`Error fetching time for ${tzInfo.name} (${tzInfo.tz}) after multiple retries:`, error);
-                    timeOffsets[tzInfo.tz] = undefined; // Mark as failed
-                    const el = document.getElementById(Object.keys(timezones).find(key => timezones[key].tz === tzInfo.tz));
+        const fetchSeoulTime = async () => {
+            try {
+                const res = await retryFetch(`https://timeapi.io/api/Time/current/zone?timeZone=Asia/Seoul`);
+                const data = await res.json();
+                const serverTime = new Date(data.dateTime).getTime();
+                const localTime = new Date().getTime();
+                seoulTimeOffset = serverTime - localTime;
+                
+                updateClocks(); // Initial display
+                setInterval(updateClocks, 1000); // Start updating every second
+
+            } catch (error) {
+                console.error(`Error fetching time for Seoul from timeapi.io:`, error);
+                Object.keys(cityConfig).forEach(id => {
+                    const el = document.getElementById(id);
                     if (el) {
                         const timeEl = el.querySelector('.time');
                         if (timeEl) {
                             timeEl.textContent = 'API 연결 실패';
-                            timeEl.classList.add('time-error'); // Add class for styling
+                            timeEl.classList.add('time-error');
                         }
                     }
-                }
-            });
-            await Promise.allSettled(fetchPromises); // Use allSettled to wait for all promises regardless of success/failure
-            console.log('Calculated timeOffsets:', timeOffsets); // Debugging line
-            updateClocks(); // Initial display for successful ones
-            setInterval(updateClocks, 1000); // Start updating
+                });
+            }
         };
 
         const updateClocks = () => {
-            const localNow = new Date();
-            Object.entries(timezones).forEach(([id, { name, tz, image }]) => {
-                const offset = timeOffsets[tz];
+            if (seoulTimeOffset === null) return;
+
+            const now = new Date();
+            const seoulTime = new Date(now.getTime() + seoulTimeOffset);
+
+            Object.entries(cityConfig).forEach(([id, { offsetHours }]) => {
                 const el = document.getElementById(id);
+                if (!el) return;
 
-                if (offset === undefined) {
-                    const timeEl = el.querySelector('.time');
-                    if (timeEl) {
-                        timeEl.textContent = 'API 연결 실패';
-                        timeEl.classList.add('time-error');
-                    }
-                    return; 
-                }
-
-                const cityTime = new Date(localNow.getTime() + offset);
+                const cityTime = new Date(seoulTime.getTime() + offsetHours * 60 * 60 * 1000);
                 
                 const hours = String(cityTime.getHours()).padStart(2, '0');
                 const minutes = String(cityTime.getMinutes()).padStart(2, '0');
@@ -127,12 +119,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const timeEl = el.querySelector('.time');
                 if (timeEl) {
                      timeEl.textContent = `${hours}:${minutes}:${seconds}`;
-                     timeEl.classList.remove('time-error'); // Remove error class if time is successfully shown
+                     if(timeEl.classList.contains('loading-text')) {
+                        timeEl.classList.remove('loading-text');
+                     }
+                     timeEl.classList.remove('time-error');
                 }
             });
         };
         
-        fetchWorldTimes();
+        fetchSeoulTime();
     }
 
     // --- Lotto Number Generator ---
