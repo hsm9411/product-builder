@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ToolSection from './ToolSection';
 
 const LottoGenerator = () => {
     const [numbers, setNumbers] = useState([]);
@@ -27,8 +28,7 @@ const LottoGenerator = () => {
 
 
     return (
-        <section className="tool-section">
-            <h2 className="title">로또 번호 생성기</h2>
+        <ToolSection title="로또 번호 생성기">
             <div id="lotto-numbers" className="lotto-numbers-container">
                 {numbers.length > 0 ? (
                     numbers.map((number, index) => (
@@ -56,7 +56,7 @@ const LottoGenerator = () => {
                 <p>많은 사람들이 자신만의 전략으로 로또 번호를 선택합니다. 가족의 생일을 조합하거나, 꿈에서 본 숫자를 선택하거나, 혹은 통계적으로 자주 나오는 번호를 분석하기도 합니다. 하지만 기억하세요, 로또의 모든 번호는 독립적인 확률을 가집니다. 과거의 데이터가 미래의 결과를 보장하지는 않습니다. 저희 생성기는 이러한 편견 없이, 완전히 새로운 행운의 가능성을 열어드립니다.</p>
                 <p className="warning"><strong>잊지 마세요:</strong> 로또는 오락의 일환으로 즐기는 것이 가장 좋습니다. 과도한 몰입은 지양하고, 작은 즐거움으로만 활용하시기 바랍니다.</p>
             </div>
-        </section>
+        </ToolSection>
     );
 };
 

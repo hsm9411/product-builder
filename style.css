@@ -1,4 +1,5 @@
 :root {
+    /* Color Palette */
     --bg-color: #ffffff;
     --text-color: #212529;
     --card-bg-color: #ffffff;
@@ -8,11 +9,26 @@
     --border-color: #dee2e6;
     --header-bg: #ffffff;
     --footer-bg: #f8f9fa;
+
+    /* Lotto Ball Colors */
     --ball-color-1: #f7b225; /* 1-10 */
     --ball-color-2: #3498db; /* 11-20 */
     --ball-color-3: #e74c3c; /* 21-30 */
     --ball-color-4: #9b59b6; /* 31-40 */
     --ball-color-5: #2ecc71; /* 41-45 */
+
+    /* Typography System */
+    --font-size-h1: 2.5rem;   /* 40px */
+    --font-size-h2: 2rem;     /* 32px */
+    --font-size-h3: 1.75rem;  /* 28px */
+    --font-size-h4: 1.25rem;  /* 20px */
+    --font-size-body: 1rem;   /* 16px */
+    --line-height-body: 1.6;
+    --line-height-heading: 1.2;
+
+    /* Layout */
+    --layout-max-width: 1024px;
+    --container-padding: 24px;
 }
 
 html[data-theme='dark'] {
@@ -38,8 +54,19 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.3s ease, color 0.3s ease;
-    line-height: 1.6;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
 }
+
+h1, h2, h3, h4 {
+    line-height: var(--line-height-heading);
+    margin-bottom: 0.5em; /* Consistent spacing */
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+h4 { font-size: var(--font-size-h4); }
 
 .page-container {
     display: flex;
@@ -98,10 +125,11 @@ body {
 
 .content-wrapper {
     flex: 1;
-    max-width: 900px;
+    max-width: var(--layout-max-width);
     width: 100%;
-    margin: 30px auto;
-    padding: 0 24px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px var(--container-padding);
 }
 
 .tool-section, .content-section, .intro-section {
