@@ -79,6 +79,12 @@ body {
     gap: 20px;
 }
 
+.nav-links-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .nav-links a {
     color: var(--text-color);
     text-decoration: none;
