@@ -199,6 +199,11 @@ h4 { font-size: var(--font-size-h4); }
     margin-bottom: 12px;
 }
 
+/* Spacing Fix: Increase margin for the title in the book recommendation section */
+.tool-section:has(.subject-buttons) .title {
+    margin-bottom: 2rem;
+}
+
 .section-description {
     text-align: center;
     font-size: 16px;
@@ -522,8 +527,9 @@ h4 { font-size: var(--font-size-h4); }
 .subject-buttons {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 2.5rem; /* Increased margin */
+    /* Spacing Fix: Increased gap for better button separation */
+    gap: 1rem;
+    margin-bottom: 2.5rem; /* This already provides enough space below the buttons */
 }
 
 .subject-btn {
@@ -617,6 +623,8 @@ h4 { font-size: var(--font-size-h4); }
     align-items: center;
     gap: 20px;
     margin-bottom: 24px;
+    /* Spacing Fix: Added padding for breathing room around the card */
+    padding: 2rem;
 }
 
 .meal-card {
@@ -626,6 +634,12 @@ h4 { font-size: var(--font-size-h4); }
     overflow: hidden;
     width: 100%;
     max-width: 700px;
+    /* Spacing Fix: Added internal padding for content */
+    padding: 2rem;
+    /* Spacing Fix: Use flexbox and gap for consistent vertical spacing */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .meal-image {
@@ -633,17 +647,18 @@ h4 { font-size: var(--font-size-h4); }
     height: auto;
     max-height: 400px;
     object-fit: cover;
-    margin-bottom: 1.5rem;
+    /* margin-bottom is now handled by parent's gap property */
+    border-radius: 8px; /* Match card's border radius */
 }
 
 .meal-details {
-    padding: 2rem;
+    padding: 0; /* Padding is now handled by the parent .meal-card */
 }
 
 .meal-name {
     font-size: 24px;
     font-weight: 700;
-    margin-bottom: 1.5rem;
+    /* margin-bottom is now handled by parent's gap property */
     color: var(--text-color);
 }
 
