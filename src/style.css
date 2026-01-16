@@ -11,6 +11,10 @@ html, body {
   overflow-x: hidden;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 #root {
   width: 100%;
   min-height: 100vh;
@@ -22,7 +26,8 @@ html, body {
 :root {
     /* Color Palette */
     --bg-color: #ffffff;
-    --text-color: #212529;
+    --text-color: #333333; /* Softer black */
+    --text-color-light: #6c757d; /* Lighter gray for secondary text */
     --card-bg-color: #ffffff;
     --primary-color: #007bff;
     --primary-hover-color: #0069d9;
@@ -49,12 +54,13 @@ html, body {
 
     /* Layout */
     --layout-max-width: 1024px;
-    --container-padding: 24px;
+    --container-padding: 2rem; /* 32px */
 }
 
 html[data-theme='dark'] {
     --bg-color: #121212;
-    --text-color: #e0e0e0;
+    --text-color: #f8f9fa; /* Brighter white for better contrast */
+    --text-color-light: #adb5bd; /* Lighter gray for dark mode */
     --card-bg-color: #1e1e1e;
     --primary-color: #3a96ff;
     --primary-hover-color: #5aa6ff;
@@ -79,9 +85,15 @@ body {
     line-height: var(--line-height-body);
 }
 
+p, li {
+    line-height: 1.7; /* Increased for better readability */
+    margin-bottom: 1rem;
+}
+
 h1, h2, h3, h4 {
     line-height: var(--line-height-heading);
-    margin-bottom: 0.5em; /* Consistent spacing */
+    margin-bottom: 1rem; /* Increased spacing */
+    font-weight: 700; /* Bolder headings */
 }
 
 h1 { font-size: var(--font-size-h1); }
@@ -98,7 +110,7 @@ h4 { font-size: var(--font-size-h4); }
 .main-header {
     background-color: var(--header-bg);
     box-shadow: 0 2px 4px var(--shadow-color);
-    padding: 0 24px;
+    padding: 0 var(--container-padding);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -150,16 +162,22 @@ h4 { font-size: var(--font-size-h4); }
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding: 30px var(--container-padding);
+    padding: 2.5rem var(--container-padding); /* Increased top/bottom padding */
 }
 
 .tool-section, .content-section, .intro-section {
     background-color: var(--card-bg-color);
-    padding: 24px;
-    border-radius: 8px;
+    padding: 2rem;
+    border-radius: 12px; /* Softer, larger radius */
     border: 1px solid var(--border-color);
-    margin-bottom: 30px;
-    box-shadow: 0 2px 8px var(--shadow-color);
+    margin-bottom: 2.5rem;
+    box-shadow: 0 4px 12px var(--shadow-color); /* More subtle shadow */
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.tool-section:hover, .content-section:hover, .intro-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--shadow-color);
 }
 
 .intro-section h1 {
@@ -242,11 +260,14 @@ h4 { font-size: var(--font-size-h4); }
 
 .generate-btn:hover, .submit-btn:hover, .tm-start-btn:hover {
     background-color: var(--primary-hover-color);
+    transform: translateY(-2px); /* Add a subtle lift */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 .tm-start-btn:hover { background-color: #e94e77; }
 
 .generate-btn:active, .submit-btn:active, .tm-start-btn:active {
-    transform: scale(0.98);
+    transform: translateY(0); /* Reset lift on click */
+    box-shadow: none;
 }
 
 .main-footer {
@@ -380,16 +401,18 @@ h4 { font-size: var(--font-size-h4); }
 }
 .form-group input, .form-group textarea {
     width: 100%;
-    padding: 12px;
+    padding: 0.75rem 1rem;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 8px; /* Slightly more rounded */
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-size: 16px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .form-group input:focus, .form-group textarea:focus {
     outline: none;
     border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* Focus ring */
 }
 
 /* TM Section - Drag and Drop */
