@@ -523,7 +523,7 @@ h4 { font-size: var(--font-size-h4); }
     display: flex;
     justify-content: center;
     gap: 12px;
-    margin-bottom: 24px;
+    margin-bottom: 2.5rem; /* Increased margin */
 }
 
 .subject-btn {
@@ -553,7 +553,19 @@ h4 { font-size: var(--font-size-h4); }
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 24px;
-    min-height: 200px;
+    min-height: 300px; /* Increased height */
+    border: 1px dashed var(--border-color); /* Added border for placeholder visibility */
+    border-radius: 8px;
+    position: relative; /* For placeholder centering */
+    padding: 1.5rem; /* Added padding to prevent content touching border */
+}
+
+.book-list-container .placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 .book-card {
@@ -621,16 +633,17 @@ h4 { font-size: var(--font-size-h4); }
     height: auto;
     max-height: 400px;
     object-fit: cover;
+    margin-bottom: 1.5rem;
 }
 
 .meal-details {
-    padding: 20px;
+    padding: 2rem;
 }
 
 .meal-name {
     font-size: 24px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 1.5rem;
     color: var(--text-color);
 }
 
