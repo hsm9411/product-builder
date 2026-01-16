@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Custom Ignores
+.idx/
+.vscode/
+*.log
+firebase-debug.log
+.DS_Store
